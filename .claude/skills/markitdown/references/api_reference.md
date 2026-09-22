@@ -9,23 +9,13 @@ The main class for converting files to Markdown.
 ```python
 from markitdown import MarkItDown
 
-md = MarkItDown(
-    llm_client=None,
-    llm_model=None,
-    llm_prompt=None,
-    docintel_endpoint=None,
-    enable_plugins=False
-)
+md = MarkItDown(enable_plugins=False)
 ```
 
 #### Parameters
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `llm_client` | OpenAI client | `None` | OpenAI-compatible client for AI image descriptions |
-| `llm_model` | str | `None` | Model name (e.g., "anthropic/claude-sonnet-4.5") for image descriptions |
-| `llm_prompt` | str | `None` | Custom prompt for image description |
-| `docintel_endpoint` | str | `None` | Azure Document Intelligence endpoint |
 | `enable_plugins` | bool | `False` | Enable 3rd-party plugins |
 
 #### Methods
@@ -218,91 +208,6 @@ class MyConverter(DocumentConverter):
         return "# Converted Content\n\n..."
 ```
 
-## AI-Enhanced Conversions
-
-### Using OpenRouter for Image Descriptions
-
-```python
-from markitdown import MarkItDown
-from openai import OpenAI
-
-# Initialize OpenRouter client (OpenAI-compatible API)
-client = OpenAI(
-    api_key="your-openrouter-api-key",
-    base_url="https://openrouter.ai/api/v1"
-)
-
-# Create MarkItDown with AI support
-md = MarkItDown(
-    llm_client=client,
-    llm_model="anthropic/claude-sonnet-4.5",  # recommended for scientific vision
-    llm_prompt="Describe this image in detail for scientific documentation"
-)
-
-# Convert files with images
-result = md.convert("presentation.pptx")
-```
-
-### Available Models via OpenRouter
-
-Popular models with vision support:
-- `anthropic/claude-sonnet-4.5` - **Recommended for scientific vision**
-- `anthropic/claude-opus-4.5` - Advanced vision model
-- `openai/gpt-4o` - GPT-4 Omni
-- `openai/gpt-4-vision` - GPT-4 Vision
-- `google/gemini-pro-vision` - Gemini Pro Vision
-
-See https://openrouter.ai/models for the complete list.
-
-### Custom Prompts
-
-```python
-# For scientific diagrams
-scientific_prompt = """
-Analyze this scientific diagram or chart. Describe:
-1. The type of visualization (graph, chart, diagram, etc.)
-2. Key data points or trends
-3. Labels and axes
-4. Scientific significance
-Be precise and technical.
-"""
-
-md = MarkItDown(
-    llm_client=client,
-    llm_model="anthropic/claude-sonnet-4.5",
-    llm_prompt=scientific_prompt
-)
-```
-
-## Azure Document Intelligence
-
-### Setup
-
-1. Create Azure Document Intelligence resource
-2. Get endpoint URL
-3. Set authentication
-
-### Usage
-
-```python
-from markitdown import MarkItDown
-
-md = MarkItDown(
-    docintel_endpoint="https://YOUR-RESOURCE.cognitiveservices.azure.com/"
-)
-
-result = md.convert("complex_document.pdf")
-```
-
-### Authentication
-
-Set environment variables:
-```bash
-export AZURE_DOCUMENT_INTELLIGENCE_KEY="your-key"
-```
-
-Or pass credentials programmatically.
-
 ## Error Handling
 
 ```python
@@ -387,13 +292,4 @@ with ThreadPoolExecutor(max_workers=4) as executor:
 
 - **Python**: 3.10 or higher required
 - **Dependencies**: Check `setup.py` for version constraints
-- **OpenAI**: Compatible with OpenAI Python SDK v1.0+
-
-## Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `OPENROUTER_API_KEY` | OpenRouter API key for image descriptions | `sk-or-v1-...` |
-| `AZURE_DOCUMENT_INTELLIGENCE_KEY` | Azure DI authentication | `key123...` |
-| `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` | Azure DI endpoint | `https://...` |
 

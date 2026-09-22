@@ -37,12 +37,6 @@ result = md.convert("research_paper.pdf")
 print(result.text_content)
 ```
 
-**Enhanced with Azure Document Intelligence**:
-```python
-md = MarkItDown(docintel_endpoint="https://YOUR-ENDPOINT.cognitiveservices.azure.com/")
-result = md.convert("complex_layout.pdf")
-```
-
 ---
 
 ### Microsoft Word (.docx)
@@ -110,15 +104,6 @@ Content from slide 1...
 # Slide 2: Next Topic
 
 ...
-```
-
-**With AI Image Descriptions**:
-```python
-from openai import OpenAI
-
-client = OpenAI()
-md = MarkItDown(llm_client=client, llm_model="gpt-4o")
-result = md.convert("presentation.pptx")
 ```
 
 ---
@@ -190,19 +175,6 @@ pip install 'markitdown[all]'  # Includes image support
 - Resolution: 4000x3000
 ```
 
-**Output With AI**:
-```python
-from openai import OpenAI
-
-client = OpenAI()
-md = MarkItDown(
-    llm_client=client,
-    llm_model="gpt-4o",
-    llm_prompt="Describe this scientific diagram in detail"
-)
-result = md.convert("graph.png")
-```
-
 **OCR for Text Extraction**:
 Requires Tesseract OCR:
 ```bash
@@ -219,39 +191,9 @@ sudo apt-get install tesseract-ocr
 
 ### Audio (.wav, .mp3)
 
-**Capabilities**:
-- Metadata extraction
-- Speech-to-text transcription
-- Duration and technical info
-
-**Dependencies**:
-```bash
-pip install 'markitdown[audio-transcription]'
-```
-
-**Best For**:
-- Lecture recordings
-- Interviews
-- Podcasts
-- Meeting recordings
-
-**Output Format**:
-```markdown
-# Audio: interview.mp3
-
-**Metadata**:
-- Duration: 45:32
-- Bitrate: 320kbps
-- Sample Rate: 44100Hz
-
-**Transcription**:
-[Transcribed text appears here...]
-```
-
-**Example**:
-```python
-result = md.convert("lecture.mp3")
-```
+**Not permitted in this setup.** MarkItDown's audio transcription sends the
+audio to an external speech service (Google Web Speech API). Do not install
+`[audio-transcription]` and do not convert audio files.
 
 ---
 
@@ -276,31 +218,6 @@ result = md.convert("lecture.mp3")
 **Example**:
 ```python
 result = md.convert("webpage.html")
-```
-
----
-
-### YouTube URLs
-
-**Capabilities**:
-- Fetch video transcriptions
-- Extract video metadata
-- Caption download
-
-**Dependencies**:
-```bash
-pip install 'markitdown[youtube-transcription]'
-```
-
-**Best For**:
-- Educational videos
-- Lectures
-- Talks
-- Tutorials
-
-**Example**:
-```python
-result = md.convert("https://www.youtube.com/watch?v=VIDEO_ID")
 ```
 
 ---
@@ -454,28 +371,18 @@ result = md.convert("message.msg")
 
 ### PDF Best Practices
 
-1. **Use Azure Document Intelligence for complex layouts**:
-   ```python
-   md = MarkItDown(docintel_endpoint="endpoint_url")
-   ```
-
-2. **For scanned PDFs, ensure OCR is set up**:
+1. **For scanned PDFs, ensure OCR is set up**:
    ```bash
    brew install tesseract  # macOS
    ```
 
-3. **Split very large PDFs before conversion** for better performance
+2. **Split very large PDFs before conversion** for better performance
 
 ### PowerPoint Best Practices
 
-1. **Use AI for visual content**:
-   ```python
-   md = MarkItDown(llm_client=client, llm_model="gpt-4o")
-   ```
+1. **Check speaker notes** - they're included in output
 
-2. **Check speaker notes** - they're included in output
-
-3. **Complex animations won't be captured** - static content only
+2. **Complex animations won't be captured** - static content only
 
 ### Excel Best Practices
 
@@ -485,32 +392,13 @@ result = md.convert("message.msg")
 
 3. **Multiple sheets** are all included in output
 
-4. **Charts become text descriptions** (use AI for better descriptions)
+4. **Charts become text descriptions**
 
 ### Image Best Practices
 
-1. **Use AI for meaningful descriptions**:
-   ```python
-   md = MarkItDown(
-       llm_client=client,
-       llm_model="gpt-4o",
-       llm_prompt="Describe this scientific figure in detail"
-   )
-   ```
+1. **For text-heavy images, ensure OCR dependencies** are installed
 
-2. **For text-heavy images, ensure OCR dependencies** are installed
-
-3. **High-resolution images** may take longer to process
-
-### Audio Best Practices
-
-1. **Clear audio** produces better transcriptions
-
-2. **Long recordings** may take significant time
-
-3. **Consider splitting long audio files** for faster processing
-
----
+2. **High-resolution images** may take longer to process
 
 ## Unsupported Formats
 
