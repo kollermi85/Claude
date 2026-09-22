@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1410 640" width="1410" height="640" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>
+<rect width="1410" height="640" fill="#ffffff"/>
+<text x="30" y="42" font-size="24" font-weight="700" fill="#1a1a1a">Projektablauf Immobilien-Projektentwicklung</text>
+<text x="30" y="66" font-size="14" fill="#555">Von der Grundstückssicherung bis zur Übergabe – fünf Phasen mit Go/No-Go-Entscheidungen (Gates)</text>
+<rect x="30" y="90" width="230" height="50" rx="6" fill="#0072B2"/>
+<text x="46" y="122" font-size="16" font-weight="700" fill="#ffffff" stroke="#00000040" stroke-width="0.4">1  Akquisition</text>
+<rect x="30" y="165" width="230" height="66" rx="4" fill="#E6F1F8" stroke="#0072B2" stroke-width="1.5"/>
+<text x="44" y="193" font-size="14" font-weight="600" fill="#1a1a1a">Standortanalyse</text>
+<text x="44" y="213" font-size="12" fill="#444">Lage · Markt · Nachfrage</text>
+<line x1="145.0" y1="231" x2="145.0" y2="248" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="30" y="250" width="230" height="66" rx="4" fill="#E6F1F8" stroke="#0072B2" stroke-width="1.5"/>
+<text x="44" y="278" font-size="14" font-weight="600" fill="#1a1a1a">Due Diligence</text>
+<text x="44" y="298" font-size="12" fill="#444">Grundbuch · Widmung · Altlasten</text>
+<line x1="145.0" y1="316" x2="145.0" y2="333" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="30" y="335" width="230" height="66" rx="4" fill="#E6F1F8" stroke="#0072B2" stroke-width="1.5"/>
+<text x="44" y="363" font-size="14" font-weight="600" fill="#1a1a1a">Grundstückssicherung</text>
+<text x="44" y="383" font-size="12" fill="#444">Option · Kaufvertrag</text>
+<line x1="145.0" y1="140" x2="145.0" y2="163" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="260" y1="115.0" x2="265.0" y2="115.0" stroke="#444" stroke-width="1.5"/>
+<polygon points="285.0,95.0 305.0,115.0 285.0,135.0 265.0,115.0" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+<text x="285.0" y="119.0" font-size="11" font-weight="700" text-anchor="middle" fill="#1a1a1a">G1</text>
+<line x1="305.0" y1="115.0" x2="308" y2="115.0" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="310" y="90" width="230" height="50" rx="6" fill="#E69F00"/>
+<text x="326" y="122" font-size="16" font-weight="700" fill="#ffffff" stroke="#00000040" stroke-width="0.4">2  Konzeption</text>
+<rect x="310" y="165" width="230" height="66" rx="4" fill="#FDF3E1" stroke="#E69F00" stroke-width="1.5"/>
+<text x="324" y="193" font-size="14" font-weight="600" fill="#1a1a1a">Machbarkeitsstudie</text>
+<text x="324" y="213" font-size="12" fill="#444">Nutzung · Kubatur · Varianten</text>
+<line x1="425.0" y1="231" x2="425.0" y2="248" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="310" y="250" width="230" height="66" rx="4" fill="#FDF3E1" stroke="#E69F00" stroke-width="1.5"/>
+<text x="324" y="278" font-size="14" font-weight="600" fill="#1a1a1a">Wirtschaftlichkeit</text>
+<text x="324" y="298" font-size="12" fill="#444">Kosten · Erlöse · Finanzierung</text>
+<line x1="425.0" y1="316" x2="425.0" y2="333" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="310" y="335" width="230" height="66" rx="4" fill="#FDF3E1" stroke="#E69F00" stroke-width="1.5"/>
+<text x="324" y="363" font-size="14" font-weight="600" fill="#1a1a1a">Nachhaltigkeitsstrategie</text>
+<text x="324" y="383" font-size="12" fill="#444">klimaaktiv · ÖGNI · EU-Taxonomie</text>
+<line x1="425.0" y1="140" x2="425.0" y2="163" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="540" y1="115.0" x2="545.0" y2="115.0" stroke="#444" stroke-width="1.5"/>
+<polygon points="565.0,95.0 585.0,115.0 565.0,135.0 545.0,115.0" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+<text x="565.0" y="119.0" font-size="11" font-weight="700" text-anchor="middle" fill="#1a1a1a">G2</text>
+<line x1="585.0" y1="115.0" x2="588" y2="115.0" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="590" y="90" width="230" height="50" rx="6" fill="#009E73"/>
+<text x="606" y="122" font-size="16" font-weight="700" fill="#ffffff" stroke="#00000040" stroke-width="0.4">3  Planung &amp; Genehmigung</text>
+<rect x="590" y="165" width="230" height="66" rx="4" fill="#E3F4EF" stroke="#009E73" stroke-width="1.5"/>
+<text x="604" y="193" font-size="14" font-weight="600" fill="#1a1a1a">Vor- &amp; Entwurfsplanung</text>
+<text x="604" y="213" font-size="12" fill="#444">Planerteam · Gutachten</text>
+<line x1="705.0" y1="231" x2="705.0" y2="248" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="590" y="250" width="230" height="66" rx="4" fill="#E3F4EF" stroke="#009E73" stroke-width="1.5"/>
+<text x="604" y="278" font-size="14" font-weight="600" fill="#1a1a1a">Einreichplanung</text>
+<text x="604" y="298" font-size="12" fill="#444">Bauordnung für Wien</text>
+<line x1="705.0" y1="316" x2="705.0" y2="333" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="590" y="335" width="230" height="66" rx="4" fill="#E3F4EF" stroke="#009E73" stroke-width="1.5"/>
+<text x="604" y="363" font-size="14" font-weight="600" fill="#1a1a1a">Baubewilligung</text>
+<text x="604" y="383" font-size="12" fill="#444">Bauverfahren · Anrainer</text>
+<line x1="705.0" y1="140" x2="705.0" y2="163" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="820" y1="115.0" x2="825.0" y2="115.0" stroke="#444" stroke-width="1.5"/>
+<polygon points="845.0,95.0 865.0,115.0 845.0,135.0 825.0,115.0" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+<text x="845.0" y="119.0" font-size="11" font-weight="700" text-anchor="middle" fill="#1a1a1a">G3</text>
+<line x1="865.0" y1="115.0" x2="868" y2="115.0" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="870" y="90" width="230" height="50" rx="6" fill="#D55E00"/>
+<text x="886" y="122" font-size="16" font-weight="700" fill="#ffffff" stroke="#00000040" stroke-width="0.4">4  Realisierung</text>
+<rect x="870" y="165" width="230" height="66" rx="4" fill="#FBEAE0" stroke="#D55E00" stroke-width="1.5"/>
+<text x="884" y="193" font-size="14" font-weight="600" fill="#1a1a1a">Ausführungsplanung</text>
+<text x="884" y="213" font-size="12" fill="#444">Details · Leistungsverzeichnisse</text>
+<line x1="985.0" y1="231" x2="985.0" y2="248" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="870" y="250" width="230" height="66" rx="4" fill="#FBEAE0" stroke="#D55E00" stroke-width="1.5"/>
+<text x="884" y="278" font-size="14" font-weight="600" fill="#1a1a1a">Ausschreibung &amp; Vergabe</text>
+<text x="884" y="298" font-size="12" fill="#444">ÖNORM B 2110 · Verträge</text>
+<line x1="985.0" y1="316" x2="985.0" y2="333" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="870" y="335" width="230" height="66" rx="4" fill="#FBEAE0" stroke="#D55E00" stroke-width="1.5"/>
+<text x="884" y="363" font-size="14" font-weight="600" fill="#1a1a1a">Bauausführung</text>
+<text x="884" y="383" font-size="12" fill="#444">Bauaufsicht · Kosten · Termine</text>
+<line x1="985.0" y1="140" x2="985.0" y2="163" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<line x1="1100" y1="115.0" x2="1105.0" y2="115.0" stroke="#444" stroke-width="1.5"/>
+<polygon points="1125.0,95.0 1145.0,115.0 1125.0,135.0 1105.0,115.0" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.5"/>
+<text x="1125.0" y="119.0" font-size="11" font-weight="700" text-anchor="middle" fill="#1a1a1a">G4</text>
+<line x1="1145.0" y1="115.0" x2="1148" y2="115.0" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="1150" y="90" width="230" height="50" rx="6" fill="#CC79A7"/>
+<text x="1166" y="122" font-size="16" font-weight="700" fill="#ffffff" stroke="#00000040" stroke-width="0.4">5  Abschluss</text>
+<rect x="1150" y="165" width="230" height="66" rx="4" fill="#F8EAF2" stroke="#CC79A7" stroke-width="1.5"/>
+<text x="1164" y="193" font-size="14" font-weight="600" fill="#1a1a1a">Fertigstellung</text>
+<text x="1164" y="213" font-size="12" fill="#444">Fertigstellungsanzeige</text>
+<line x1="1265.0" y1="231" x2="1265.0" y2="248" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="1150" y="250" width="230" height="66" rx="4" fill="#F8EAF2" stroke="#CC79A7" stroke-width="1.5"/>
+<text x="1164" y="278" font-size="14" font-weight="600" fill="#1a1a1a">Übernahme &amp; Übergabe</text>
+<text x="1164" y="298" font-size="12" fill="#444">Mängel · Dokumentation</text>
+<line x1="1265.0" y1="316" x2="1265.0" y2="333" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="1150" y="335" width="230" height="66" rx="4" fill="#F8EAF2" stroke="#CC79A7" stroke-width="1.5"/>
+<text x="1164" y="363" font-size="14" font-weight="600" fill="#1a1a1a">Gewährleistung</text>
+<text x="1164" y="383" font-size="12" fill="#444">Betrieb · Facility Management</text>
+<line x1="1265.0" y1="140" x2="1265.0" y2="163" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="310" y="428" width="1070" height="38" rx="4" fill="#F2F2F2" stroke="#888" stroke-dasharray="5 4"/>
+<text x="324" y="452" font-size="13" fill="#1a1a1a"><tspan font-weight="700">Vermarktung &amp; Verwertung</tspan>  – parallel ab Konzeption: Vorverwertung, Verkauf / Vermietung, Übergabe an Käufer bzw. Mieter</text>
+<rect x="30" y="478" width="1350" height="38" rx="4" fill="#F2F2F2" stroke="#888" stroke-dasharray="5 4"/>
+<text x="44" y="502" font-size="13" fill="#1a1a1a"><tspan font-weight="700">Projektsteuerung</tspan>  – durchgehend: Kosten · Termine · Qualität · Risiken · ESG-Reporting · Stakeholder</text>
+<text x="30" y="560" font-size="13" font-weight="700" fill="#1a1a1a">Gates (Go/No-Go):</text>
+<text x="170" y="560" font-size="13" fill="#333">G1 Ankaufsentscheidung</text>
+<text x="358.4" y="560" font-size="13" fill="#333">G2 Projektfreigabe</text>
+<text x="518.0" y="560" font-size="13" fill="#333">G3 Baufreigabe (Bewilligung + Finanzierung)</text>
+<text x="857.6" y="560" font-size="13" fill="#333">G4 Abnahme</text>
+<text x="30" y="586" font-size="12" fill="#555">Bei „Nein“ an einem Gate: Überarbeitung der vorigen Phase oder Projektausstieg. Gestrichelt = phasenübergreifende Aufgaben.</text>
+</svg>
