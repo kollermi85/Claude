@@ -1,7 +1,7 @@
 # Vorlage für neue Projektnotizen
 
-Beim Anlegen eines neuen Arbeitsprojekts als `<Projekt>.md` in den neuen
-Ordner `10 Projekte/Arbeit/<Projekt>/` hochladen (`text/markdown`,
+Beim Anlegen eines neuen Projekts als `<Projekt>.md` in den neuen
+Ordner `10 Projekte/Arbeit/<Projekt>/` bzw. `10 Projekte/Privat/<Projekt>/` hochladen (`text/markdown`,
 `disableConversionToGoogleType: true`). `<Projekt>`, das Datum und die
 Stichworte ersetzen. Basiert auf `90 Vorlagen/Vorlage Projekt.md` des Nutzers,
 ergänzt um `aliases` und `stichworte` für die automatische Zuordnung.
@@ -9,6 +9,7 @@ ergänzt um `aliases` und `stichworte` für die automatische Zuordnung.
 ```markdown
 ---
 typ: Projekt
+bereich: <Arbeit|Privat>
 status: aktiv
 start: <JJJJ-MM-TT>
 aliases: [<Projekt>]
@@ -42,3 +43,7 @@ stichworte: [<Adresse>, <EZ/KG>, <Projektcode>, <Bauherr>, <Architekt>]
 ## Protokolle & Notizen
 Umgewandelte Dokumente liegen in diesem Ordner und verlinken über `projekt: "[[<Projekt>]]"` hierher – siehe Rückverweise (Backlinks).
 ```
+
+Bei **Privatprojekten** die Abschnitte an das Thema anpassen: „Eckdaten“ und
+„Beteiligte“ frei formulieren (z. B. Budget, Anbieter, Fristen), die
+immobilienspezifischen Felder (EZ/KG, Phase, Konsulenten) weglassen.

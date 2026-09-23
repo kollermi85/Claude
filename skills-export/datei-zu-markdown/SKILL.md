@@ -1,6 +1,6 @@
 ---
 name: datei-zu-markdown
-description: Wandelt jede angehängte oder hochgeladene Datei (PDF, Word/DOCX, PowerPoint/PPTX, Excel/XLSX/XLS, CSV, HTML, JSON, EPUB, Outlook-MSG, ZIP) zuerst lokal mit Microsoft MarkItDown in Markdown um, bevor damit gearbeitet wird - ohne Cloud-Konverter oder KI-Dienste. IMMER verwenden, sobald der Nutzer eine Datei anhängt oder hochlädt, egal ob er zusammenfassen, prüfen, vergleichen, Zahlen herausziehen, Fragen dazu beantworten oder nur "schau dir das an" möchte - auch wenn er Markdown nicht erwähnt. Ebenso bei ausdrücklichen Anfragen wie "in Markdown umwandeln", "als .md", "Text aus der PDF holen". Legt die Markdown-Notiz anschließend im Obsidian-Vault des Nutzers (Google Drive) im passenden Projektordner ab und fragt nach, wenn die Datei keinem Projekt eindeutig zuzuordnen ist.
+description: Wandelt jede angehängte oder hochgeladene Datei (PDF, Word/DOCX, PowerPoint/PPTX, Excel/XLSX/XLS, CSV, HTML, JSON, EPUB, Outlook-MSG, ZIP) zuerst lokal mit Microsoft MarkItDown in Markdown um, bevor damit gearbeitet wird - ohne Cloud-Konverter oder KI-Dienste. IMMER verwenden, sobald der Nutzer eine Datei anhängt oder hochlädt, egal ob er zusammenfassen, prüfen, vergleichen, Zahlen herausziehen, Fragen dazu beantworten oder nur "schau dir das an" möchte - auch wenn er Markdown nicht erwähnt. Ebenso bei ausdrücklichen Anfragen wie "in Markdown umwandeln", "als .md", "Text aus der PDF holen". Legt die Markdown-Notiz anschließend im Obsidian-Vault des Nutzers (Google Drive) im passenden Arbeits- oder Privatprojekt ab und fragt nach, wenn die Datei keinem Projekt eindeutig zuzuordnen ist.
 ---
 
 # Datei zu Markdown (lokal)
@@ -95,6 +95,7 @@ Aufbau des Vaults:
 |---|---|
 | `00 Inbox` | Neues, noch nicht Einsortiertes |
 | `10 Projekte/Arbeit/<Projekt>` | berufliche Projekte, z. B. `FH3`, `AQ` (weitere folgen) |
+| `10 Projekte/Privat/<Projekt>` | private Projekte (z. B. Wohnung, Garten, Reise, Finanzen) |
 | `20 Wissen` | Nachhaltigkeit, ESG, mentale Themen, Bücher, Podcasts |
 | `30 Gesundheit` | Befunde, Ernährung, Autoimmunerkrankung |
 | `40 Journal` | Tagesnotizen |
@@ -102,9 +103,12 @@ Aufbau des Vaults:
 
 ### a) Projekt ermitteln
 
-1. Aktuelle Projekte laden: Unterordner von `10 Projekte/Arbeit` per
-   `search_files` mit `parentId = '<ID von Arbeit>'` (Arbeit-ID aktuell
-   `1eSy1NHKGFVpkuqFjR5LrJklvaCKmv1VW`). In jedem Projektordner liegt eine
+1. Aktuelle Projekte laden - aus **beiden** Bereichen, per `search_files`
+   `(parentId = '1eSy1NHKGFVpkuqFjR5LrJklvaCKmv1VW' or parentId = '171TlBlbPvIb6Jj-rZf8K0H50VXE-1Hv9') and mimeType = 'application/vnd.google-apps.folder'`
+   (erste ID = `10 Projekte/Arbeit`, zweite = `10 Projekte/Privat`; falls die
+   IDs nicht mehr passen, die Ordner über ihren Namen unter `10 Projekte`
+   suchen). Anhand des `parentId` jedes Treffers festhalten, ob es ein
+   Arbeits- oder ein Privatprojekt ist. In jedem Projektordner liegt eine
    Projektnotiz `<Projekt>.md`; ihr Frontmatter enthält `aliases` und
    `stichworte` (Adresse, EZ/KG, Projektcode, Beteiligte ...). Die Notizen
    mit `read_file_content` lesen - die Projektliste ändert sich, deshalb
@@ -119,9 +123,14 @@ Aufbau des Vaults:
    - **Kein oder mehr als ein Treffer: nachfragen, nicht raten.** Eine
      falsch einsortierte Notiz fällt in Obsidian kaum auf und ist später
      schwer wiederzufinden - eine kurze Rückfrage kostet weniger. Antwortmöglichkeiten
-     anbieten: jedes vorhandene Arbeitsprojekt, „Neues Arbeitsprojekt anlegen“,
+     anbieten: die vorhandenen Projekte mit Bereich gekennzeichnet (z. B.
+     „FH3 (Arbeit)“, „Wohnung (Privat)“), „Neues Projekt anlegen“,
      `00 Inbox`, sowie `20 Wissen` bzw. `30 Gesundheit`, wenn der Inhalt
-     danach aussieht (z. B. Fachartikel bzw. Laborbefund). Wenn ein
+     danach aussieht (z. B. Fachartikel bzw. Laborbefund). Bei
+     Gleichnamigkeit in beiden Bereichen immer nachfragen.
+   - Private Dokumente (Mietvertrag der eigenen Wohnung, Versicherung,
+     Arztbrief) nie automatisch in einen Arbeitsordner legen und umgekehrt -
+     bei Zweifel, ob etwas beruflich oder privat ist, fragen. Wenn ein
      Rückfrage-Werkzeug mit Auswahlknöpfen verfügbar ist, dieses verwenden.
 
 ### b) Als Obsidian-Notiz umwandeln
@@ -154,13 +163,16 @@ prüfen, ob es die Notiz schon gibt. Wenn ja, den Nutzer fragen; ohne Antwort
 mit angehängtem Datum ablegen (`<Name> 2026-09-23.md`), nie stillschweigend
 doppelt.
 
-### d) Neues Arbeitsprojekt anlegen
+### d) Neues Projekt anlegen
 
-Wenn der Nutzer ein neues Projekt nennt: unter `10 Projekte/Arbeit` einen
-Ordner `<Projekt>` anlegen (`create_file`, `contentMimeType`
+Wenn der Nutzer ein neues Projekt nennt, zuerst klären, ob es ein
+**Arbeits- oder Privatprojekt** ist (sofern nicht offensichtlich). Dann unter
+`10 Projekte/Arbeit` bzw. `10 Projekte/Privat` einen Ordner `<Projekt>` anlegen (`create_file`, `contentMimeType`
 `application/vnd.google-apps.folder`) und darin die Projektnotiz
 `<Projekt>.md` nach `references/projekt-vorlage.md`. Nach Stichworten
-fragen (Adresse, EZ/KG, Beteiligte) und sie ins Frontmatter schreiben - sie
+fragen (bei Arbeit: Adresse, EZ/KG, Beteiligte; bei Privat: was das Projekt
+ausmacht) und sie ins Frontmatter schreiben; bei Privatprojekten
+`bereich: Privat` statt `bereich: Arbeit` setzen - sie
 machen die automatische Zuordnung künftiger Dateien möglich.
 
 ### Wenn Google Drive nicht verfügbar ist
