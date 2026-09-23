@@ -213,12 +213,28 @@ FALLBACKS = {
 # Main
 # --------------------------------------------------------------------------
 
-def target_path(out_dir, p):
-    # "<name>.<ext>.md" keeps plan.pdf and plan.docx apart; reruns overwrite.
-    return out_dir / f"{p.name}.md"
+def target_path(out_dir, p, obsidian=False):
+    if not obsidian:
+        # "<name>.<ext>.md" keeps plan.pdf and plan.docx apart; reruns overwrite.
+        return out_dir / f"{p.name}.md"
+    # Obsidian: readable note names; add the format only on a name clash.
+    target = out_dir / f"{p.stem}.md"
+    if target.exists() and f"quelle: \"{p.name}\"" not in target.read_text(encoding="utf-8", errors="ignore"):
+        target = out_dir / f"{p.stem} ({p.suffix.lstrip('.').lower()}).md"
+    return target
 
 
-def convert_one(p, md, out_dir):
+def obsidian_header(p, projekt=None, typ="Dokument"):
+    from datetime import date
+    fm = ["---", f"typ: {typ}", f"quelle: \"{p.name}\"", f"format: {p.suffix.lstrip('.').lower()}",
+          f"konvertiert: {date.today().isoformat()}"]
+    if projekt:
+        fm.append(f"projekt: \"[[{projekt}]]\"")
+    fm += ["tags: [dokument]", "---", "", f"# {p.stem}", ""]
+    return "\n".join(fm) + "\n"
+
+
+def convert_one(p, md, out_dir, obsidian=False, projekt=None, typ="Dokument"):
     ext = p.suffix.lower()
     if ext in REFUSED:
         return None, "abgelehnt", "Audio/Video wird nicht umgewandelt (würde einen externen Dienst erfordern)", 0
@@ -250,8 +266,9 @@ def convert_one(p, md, out_dir):
     text = re.sub(r"\n{3,}", "\n\n", text).strip() + "\n"
     if ext == ".pdf" and len(text.strip()) < 50:
         note = (note + "; " if note else "") + "kaum Text gefunden - vermutlich gescanntes PDF (OCR nötig)"
-    target = target_path(out_dir, p)
-    target.write_text(f"<!-- Quelle: {p.name} -->\n\n" + text, encoding="utf-8")
+    target = target_path(out_dir, p, obsidian)
+    header = obsidian_header(p, projekt, typ) if obsidian else f"<!-- Quelle: {p.name} -->\n\n"
+    target.write_text(header + text, encoding="utf-8")
     return target, method, note, len(text)
 
 
@@ -261,6 +278,10 @@ def main():
     ap.add_argument("--out", type=Path)
     ap.add_argument("--no-install", action="store_true", help="MarkItDown nicht nachinstallieren")
     ap.add_argument("--fallback-only", action="store_true", help="Nur eingebaute Konverter nutzen")
+    ap.add_argument("--obsidian", action="store_true",
+                    help="Obsidian-Notiz: Frontmatter (typ, quelle, projekt ...) und Dateiname <name>.md")
+    ap.add_argument("--projekt", help="Projektname für den Link projekt: \"[[NAME]]\" (mit --obsidian)")
+    ap.add_argument("--typ", default="Dokument", help="Wert für typ: im Frontmatter (Standard: Dokument)")
     args = ap.parse_args()
 
     inputs = args.inputs or [DEFAULT_IN]
@@ -284,7 +305,7 @@ def main():
 
     failed = 0
     for f in files:
-        target, method, note, size = convert_one(f, md, out_dir)
+        target, method, note, size = convert_one(f, md, out_dir, args.obsidian, args.projekt, args.typ)
         if target:
             print(f"OK   {f.name} -> {target.name}  [{method}, {size:,} Zeichen, ~{size // 4:,} Tokens]"
                   + (f"  HINWEIS: {note}" if note else ""))
