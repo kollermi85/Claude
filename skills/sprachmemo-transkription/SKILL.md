@@ -20,24 +20,34 @@ find / -type f \( -iname '*.m4a' -o -iname '*.mp3' -o -iname '*.wav' -o -iname '
   -newer /etc/hostname 2>/dev/null | grep -v -E '/(proc|sys|usr)/' | head
 ```
 
-### 2. Abhängigkeiten installieren (nur beim ersten Mal pro Sitzung)
+### 2. Vorbereiten (kurz, jeweils eigener Befehl)
 ```bash
-pip install -q sherpa-onnx av numpy faster-whisper 2>&1 | tail -1
-```
-Wenn `faster-whisper` nicht installierbar ist, ist das kein Problem: Das Skript nutzt dann automatisch `sherpa-onnx`.
-
-### 3. Transkribieren
-```bash
-python <SKILL_DIR>/scripts/transcribe.py "/mnt/user-data/uploads/Memo.m4a" \
-  --output-dir /mnt/user-data/outputs --timestamps
+pip install -q sherpa-onnx av numpy 2>&1 | tail -1
+python <SKILL_DIR>/scripts/transcribe.py --check
 ```
 - `<SKILL_DIR>` ist der Ordner dieser SKILL.md.
-- Mehrere Dateien auf einmal übergeben. Das Modell wird dann nur einmal geladen.
+- `faster-whisper` hier **nicht** installieren: In der Sandbox ist Hugging Face gesperrt, das kostet nur Zeit.
+- Meldet `--check` **`NETZ_FEHLT`**, sofort abbrechen und dem Nutzer den Abschnitt „Netzwerkzugang“ unten erklären.
+  Nicht weiter probieren.
+
+### 3. Im Hintergrund transkribieren und den Fortschritt abfragen
+Der erste Lauf lädt ca. 640 MB Modell und entpackt es (1–3 Minuten). Danach folgt die Transkription.
+Damit die Antwort nicht an einer Zeitgrenze abbricht, **immer im Hintergrund starten** und nur kurz nachsehen:
+```bash
+cd /mnt/user-data/uploads && nohup python <SKILL_DIR>/scripts/transcribe.py "Memo.m4a" \
+  --engine sherpa --output-dir /mnt/user-data/outputs --timestamps > /tmp/sprachmemo.log 2>&1 &
+echo gestartet
+```
+Danach wiederholt (jeder Aufruf dauert höchstens ca. 45 s):
+```bash
+sleep 40; tail -n 3 /tmp/sprachmemo.log
+```
+- Fertig ist es, sobald eine Zeile mit `OK:` erscheint. Bei `FEHLER` den Log ganz lesen.
+- Zwischendurch dem Nutzer knapp den Stand nennen („Modell wird geladen, 60 %“, „Transkription bei 03:10 von 08:00“).
+- Mehrere Dateien in **einem** Aufruf übergeben. Das Modell wird dann nur einmal geladen.
 - Standard ist Deutsch (`--language de`). Bei anderen Sprachen `--language en` o.ä. oder `--language auto`.
 - `--timestamps` bei Aufnahmen über ca. 2 Minuten verwenden. Bei kurzen Memos weglassen, dann gibt es Fließtext.
-- Das Skript wählt die Engine selbst: zuerst faster-whisper (Hugging Face), und wenn Hugging Face gesperrt ist,
-  automatisch sherpa-onnx (Whisper-Modelle von GitHub). Die Meldung `faster-whisper ... nicht verfügbar` ist
-  normal und kein Fehler.
+- Jeder neue Chat hat eine frische Sandbox, das Modell wird dort also erneut geladen.
 
 **Modellwahl** (`--model`):
 | Modell | Download | Qualität Deutsch | Wann |
@@ -48,9 +58,8 @@ python <SKILL_DIR>/scripts/transcribe.py "/mnt/user-data/uploads/Memo.m4a" \
 | `turbo` | ca. 560 MB | sehr gut | wenn `small` Fachbegriffe verhaut |
 | `medium` | ca. 1,9 GB | sehr gut | nur mit viel Zeit |
 
-Der erste Download von `small` dauert etwa 1 bis 2 Minuten. Die Transkription läuft auf der CPU ungefähr
-in Echtzeit/5 bis Echtzeit/2 (ein 10-minütiges Memo braucht also ca. 2 bis 5 Minuten). Bei langen Dateien
-den Befehl mit ausreichend Timeout starten und dem Nutzer vorher kurz sagen, dass es etwas dauert.
+Die Transkription läuft auf der CPU ungefähr in Echtzeit/5 bis Echtzeit/2. Ein 10-minütiges Memo braucht also
+ca. 2 bis 5 Minuten.
 
 ### 4. Ergebnis liefern
 1. Die erzeugte `.md`-Datei lesen.
@@ -70,13 +79,16 @@ den Befehl mit ausreichend Timeout starten und dem Nutzer vorher kurz sagen, das
   Wer das vermeiden möchte, kann `scripts/transcribe.py` auf dem eigenen Rechner ausführen (siehe README.md im
   Skill-Ordner) und nur den fertigen Text teilen oder ganz lokal behalten.
 
+## Netzwerkzugang (wenn `NETZ_FEHLT`)
+Dem Nutzer Schritt für Schritt erklären: claude.ai im Browser → Profil unten links → **Einstellungen** →
+**Funktionen** (*Capabilities*) → **Code-Ausführung und Dateierstellung** einschalten → bei Netzwerkzugang
+**„Paketmanager und bestimmte Domains“** wählen und `github.com` sowie `release-assets.githubusercontent.com`
+hinzufügen (oder „Alle Domains“). Danach einen **neuen Chat** starten.
+
 ## Fehlerbehebung
-- **`Keine Engine verfügbar`**: Die Sandbox hat keinen Netzzugang zu GitHub oder Hugging Face. Dem Nutzer sagen,
-  dass unter Einstellungen → Funktionen der Netzwerkzugang für die Code-Ausführung aktiviert sein muss, oder die
-  lokale Variante aus der README empfehlen.
 - **Datei lässt sich nicht dekodieren**: `python -c "import av; print(av.open('DATEI').streams)"` zeigt, ob eine
-  Audiospur da ist. Bei exotischen Formaten zuerst mit `ffmpeg -i DATEI -ar 16000 -ac 1 out.wav` umwandeln, falls
-  ffmpeg vorhanden ist.
+  Audiospur da ist.
+- **Download bricht ab / sehr langsam**: mit `--model base` erneut starten (ca. 210 MB statt 640 MB).
 - **Viel Wiederholung oder Unsinn im Text**: Meist ist es sehr leise oder es läuft Musik im Hintergrund.
   `--model turbo` probieren.
 - **Falsche Sprache**: `--language` explizit setzen.

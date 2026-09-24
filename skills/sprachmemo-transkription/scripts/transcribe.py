@@ -22,6 +22,7 @@ Nutzung:
 
 import argparse
 import os
+import shutil
 import sys
 import tarfile
 import time
@@ -72,10 +73,25 @@ class FasterWhisperEngine:
 # --------------------------------------------------------------------------
 # Engine 2: sherpa-onnx (Whisper als ONNX, Modelle von GitHub)
 # --------------------------------------------------------------------------
+class ProgressReader:
+    """Datei-Wrapper, der beim Lesen den Download-Fortschritt protokolliert."""
+
+    def __init__(self, raw, total: int):
+        self.raw, self.total, self.done, self.next_report = raw, total, 0, 0.0
+
+    def read(self, n=-1):
+        data = self.raw.read(n)
+        self.done += len(data)
+        if self.total and self.done / self.total >= self.next_report:
+            log(f"  Modell-Download: {self.done / self.total:.0%} von {self.total / 1e6:.0f} MB")
+            self.next_report += 0.1
+        return data
+
+
 def download(url: str, dest: Path) -> None:
     log(f"Lade {url} ...")
     tmp = dest.with_suffix(dest.suffix + ".part")
-    with urllib.request.urlopen(url) as resp, open(tmp, "wb") as fh:
+    with urllib.request.urlopen(url, timeout=60) as resp, open(tmp, "wb") as fh:
         while chunk := resp.read(1 << 20):
             fh.write(chunk)
     tmp.rename(dest)
@@ -91,16 +107,23 @@ def ensure_sherpa_model(model: str, offline: bool) -> Path:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     url = f"{SHERPA_BASE}/sherpa-onnx-whisper-{model}.tar.bz2"
     log(f"Lade Whisper-Modell '{model}' einmalig von GitHub (nur Modell, keine Audiodaten) ...")
-    # Streamend entpacken und nur die int8-Dateien behalten (spart die Hälfte an Speicher)
-    with urllib.request.urlopen(url) as resp, tarfile.open(fileobj=resp, mode="r|bz2") as tar:
-        for member in tar:
-            base = Path(member.name).name
-            if member.isfile() and base in needed:
-                member.name = f"{model_dir.name}/{base}"
-                tar.extract(member, CACHE_DIR)
-    missing = [n for n in needed if not (model_dir / n).exists()]
+    # Streamend entpacken und nur die int8-Dateien behalten (spart die Hälfte an Speicher).
+    # Erst in einen .part-Ordner, damit ein abgebrochener Download nicht als fertig gilt.
+    part_dir = CACHE_DIR / f"{model_dir.name}.part"
+    shutil.rmtree(part_dir, ignore_errors=True)
+    with urllib.request.urlopen(url, timeout=60) as resp:
+        total = int(resp.headers.get("Content-Length") or 0)
+        with tarfile.open(fileobj=ProgressReader(resp, total), mode="r|bz2") as tar:
+            for member in tar:
+                base = Path(member.name).name
+                if member.isfile() and base in needed:
+                    member.name = f"{part_dir.name}/{base}"
+                    tar.extract(member, CACHE_DIR)
+    missing = [n for n in needed if not (part_dir / n).exists()]
     if missing:
         raise RuntimeError(f"Modell-Download unvollständig, es fehlt: {missing}")
+    shutil.rmtree(model_dir, ignore_errors=True)
+    part_dir.rename(model_dir)
     return model_dir
 
 
@@ -179,8 +202,10 @@ class SherpaEngine:
     def transcribe(self, src: Path, language: str | None) -> tuple[list[tuple[float, str]], float, str]:
         samples = load_audio(src)
         recognizer = self._recognizer(language or "")
+        total = len(samples) / SAMPLE_RATE
         out = []
         for start, seg in self._speech_segments(samples):
+            log(f"  Fortschritt: {fmt_ts(start)} / {fmt_ts(total)}")
             stream = recognizer.create_stream()
             stream.accept_waveform(SAMPLE_RATE, seg)
             recognizer.decode_stream(stream)
@@ -191,6 +216,19 @@ class SherpaEngine:
 
 
 # --------------------------------------------------------------------------
+def check_network() -> int:
+    """Schnelltest: Ist GitHub (Modellquelle) aus der Sandbox erreichbar?"""
+    url = f"{SHERPA_BASE}/silero_vad.onnx"
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=15):
+            pass
+        print("NETZ_OK: GitHub erreichbar, Modelle können geladen werden.")
+        return 0
+    except Exception as e:  # noqa: BLE001
+        print(f"NETZ_FEHLT: GitHub nicht erreichbar ({type(e).__name__}: {e}).")
+        return 3
+
+
 def load_engine(engine: str, model: str, offline: bool):
     order = {"auto": [FasterWhisperEngine, SherpaEngine],
              "faster-whisper": [FasterWhisperEngine],
@@ -224,7 +262,8 @@ def to_markdown(src: Path, segments, duration: float, language: str, engine: str
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("files", nargs="+", help="Audiodateien")
+    parser.add_argument("files", nargs="*", help="Audiodateien")
+    parser.add_argument("--check", action="store_true", help="Nur prüfen, ob die Modellquelle erreichbar ist")
     parser.add_argument("--model", default="small",
                         help="Whisper-Modell: tiny, base, small (Standard), medium, turbo")
     parser.add_argument("--language", default="de",
@@ -235,6 +274,11 @@ def main() -> int:
     parser.add_argument("--offline", action="store_true",
                         help="Keinerlei Netzwerkzugriff; Modell muss bereits lokal vorhanden sein")
     args = parser.parse_args()
+
+    if args.check:
+        return check_network()
+    if not args.files:
+        parser.error("Keine Audiodatei angegeben")
 
     language = None if args.language == "auto" else args.language
     output_dir = Path(args.output_dir)
