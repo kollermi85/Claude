@@ -1,0 +1,5 @@
+sherpa-onnx>=1.10
+av>=11
+numpy
+# optional, bevorzugte Engine wenn Hugging Face erreichbar ist:
+faster-whisper>=1.0
